@@ -1,6 +1,7 @@
 package com.example.pdfrenderdemo.controllers;
 
 
+import com.example.pdfrenderdemo.model.PDFContent;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -33,20 +34,23 @@ public class PDFController {
     @GetMapping("/getPDF")
     public byte[] welcomeController() throws IOException {
      //   Path path = Paths.get("/Users/bkedarn/Documents/dummy.pdf");
-        Resource resource = resourceLoader.getResource("classpath:dummy.pdf");
+        Resource resource = resourceLoader.getResource("classpath:KCG_HUP_1.pdf");
 
         return Files.readAllBytes(Paths.get(resource.getURI()));
 
     }
 
     @PostMapping("/putPDF")
-    public String updatePDF(@RequestBody String updatedPDF) throws IOException {
+    public String updatePDF(@RequestBody PDFContent pdfContent) throws IOException {
         try
         {
+            System.out.println("Came here");
+            System.out.println(pdfContent.getUpdatedPDF());
             //This will decode the String which is encoded by using Base64 class
-            byte[] pdfBytes= Base64.decodeBase64(updatedPDF.substring(updatedPDF.indexOf(",")));
+            //byte[] pdfBytes= Base64.decodeBase64(updatedPDF.substring(updatedPDF.indexOf(",")));
+            byte[] pdfBytes= Base64.decodeBase64(pdfContent.getUpdatedPDF());
 
-            String directory= "updated.pdf";
+            String directory= "/Users/bkedarn/Documents/updated.pdf";
 
             new FileOutputStream(directory).write(pdfBytes);
             return "Success";
